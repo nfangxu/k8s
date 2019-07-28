@@ -12,7 +12,7 @@ source ~/.bashrc
 kubectl taint nodes --all node-role.kubernetes.io/master-
 
 # 安装网络插件
-kubectl apply -f ./kube-flannel.yml
+kubectl apply -f kube-flannel.yml
 
 # 安装dashboard
-#kubectl apply -f ./kubernetes-dashboard-http.yaml
+#kubectl apply -f kubernetes-dashboard-http.yaml
