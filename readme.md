@@ -9,6 +9,8 @@ swapoff -a
 vim /etc/fstab
 
 # 主节点初始化
+kubeadm config images pull --image-repository=registry.aliyuncs.com/google_containers
+
 kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=NumCPU --image-repository=registry.aliyuncs.com/google_containers
 
 # 设置环境变量并使其生效
