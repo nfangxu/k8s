@@ -24,7 +24,7 @@ echo 'export PS1="\[\033[33m\]\u\[\033[0m\]@\[\033[36m\]k8s\[\033[0m\]:\[\033[32
 source ~/.bashrc
 
 # 基础依赖包
-apt udpate && apt -y install apt-transport-https ca-certificates curl software-properties-common
+apt update && apt -y install apt-transport-https ca-certificates curl software-properties-common
 
 # asciinema 镜像源
 apt-add-repository ppa:zanchey/asciinema
