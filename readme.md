@@ -1,15 +1,15 @@
 ## 阿里云 Ubuntu 服务器安装 k8s 全记录
 - 参考文档
 
-- [阿里云镜像加速](https://cr.console.aliyun.com/cn-beijing/instances/mirrors)
+    * [阿里云镜像加速](https://cr.console.aliyun.com/cn-beijing/instances/mirrors)
 
-- [官方文档](https://kubernetes.io/zh/docs/)
+    * [官方文档](https://kubernetes.io/zh/docs/)
 
-- [创建单个用户](https://github.com/kubernetes/dashboard/wiki/Creating-sample-user)
+    * [创建单个用户](https://github.com/kubernetes/dashboard/wiki/Creating-sample-user)
 
-- [网络插件 kube-flannel](https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml)
+    * [网络插件 kube-flannel](https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml)
 
-- [kubernetes dashboard Yaml 文件](https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta1/aio/deploy/recommended.yaml)
+    * [kubernetes dashboard Yaml 文件](https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta1/aio/deploy/recommended.yaml)
 
 ```bash
 
