@@ -1,12 +1,52 @@
 ## 阿里云 Ubuntu 服务器安装 k8s 全记录
+- 参考文档
+
+- [阿里云镜像加速](https://cr.console.aliyun.com/cn-beijing/instances/mirrors)
+
+- [官方文档](https://kubernetes.io/zh/docs/)
+
+- [创建单个用户](https://github.com/kubernetes/dashboard/wiki/Creating-sample-user)
+
+- [网络插件 kube-flannel](https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml)
+
+- [kubernetes dashboard Yaml 文件](https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta1/aio/deploy/recommended.yaml)
 
 ```bash
-# 更新一下
-apt update
+
+# vim 设置行号
+cat <<EOF > ~/.vimrc
+set nu
+EOF
+
+# 设置默认 PS1
+echo 'export PS1="\[\033[33m\]\u\[\033[0m\]@\[\033[36m\]k8s\[\033[0m\]:\[\033[32m\]\W \[\033[0m\]$ "' >> ~/.bashrc
+
+source ~/.bashrc
+
+# 基础依赖包
+apt udpate && apt -y install apt-transport-https ca-certificates curl software-properties-common
+
+# asciinema 镜像源
+apt-add-repository ppa:zanchey/asciinema
+
+# docker 和 k8s 镜像源
+curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | apt-key add -
+curl -fsSL https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -
+
+cat <<EOF >/etc/apt/sources.list.d/docker-k8s.list
+deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
+deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable
+EOF
+
+# 安装基础软件
+apt update && apt install -y asciinema docker-ce kubelet kubeadm kubectl
 
 # 关闭 swap
 swapoff -a
-vim /etc/fstab
+vim /etc/fstab # 注释掉 # /swapfile none swap sw 0 0
+
+# 前期准备完成
+
 
 # 主节点初始化
 kubeadm config images pull --image-repository=registry.aliyuncs.com/google_containers
