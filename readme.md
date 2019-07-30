@@ -77,21 +77,26 @@ kubectl get deployments --all-namespaces
 # 安装网络插件
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 
-# 安装dashboard
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta1/aio/deploy/recommended.yaml
-
 # 安装 nginx-ingress
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/mandatory.yaml
 
+# 安装dashboard
 kubectl -n kube-system create secret tls kubernetes-dashboard-certs \
   --key /certs/k8s.nfangxu.cn.key \
   --cert /certs/k8s.nfangxu.cn.pem
 
+kubectl apply -f kubernetes-dashboard.yaml
+kubectl apply -f dashboard-ingress.yaml
+
 # 获取用户Token
 kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep kubernetes-dashboard | awk '{print $1}')
 
+# 权限问题
+kubectl delete -f dashboard-admin.yaml
+kubectl create -f dashboard-admin.yaml
+
 # 查看账户状态
-kubectl get serviceaccounts kubernetes-dashboard -o yaml -n kubernetes-dashboard
+kubectl get serviceaccounts kubernetes-dashboard -o yaml -n kube-system
 ```
 
 ## dashboard 2.0-beta
@@ -111,4 +116,8 @@ kubectl create -f 1.kubernetes-dashboard.yaml
 kubectl create -f 2.dashboard-ingress.yaml
 
 kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep kubernetes-dashboard | awk '{print $1}')
+
+# 权限问题
+kubectl delete -f 3.dashboard-admin.yaml
+kubectl create -f 3.dashboard-admin.yaml
 ```
