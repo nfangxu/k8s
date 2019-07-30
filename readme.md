@@ -109,4 +109,6 @@ kubectl -n kubernetes-dashboard create secret tls kubernetes-dashboard-certs \
 kubectl create -f 1.kubernetes-dashboard.yaml
 
 kubectl create -f 2.dashboard-ingress.yaml
+
+kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep kubernetes-dashboard | awk '{print $1}')
 ```
