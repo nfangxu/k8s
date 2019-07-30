@@ -93,3 +93,20 @@ kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | gre
 # 查看账户状态
 kubectl get serviceaccounts kubernetes-dashboard -o yaml -n kubernetes-dashboard
 ```
+
+## dashboard 2.0-beta
+
+```bash
+
+cd dashboard-2.0.0-beta1
+
+kubectl create -f 0.kubernetes-namespaces.yaml
+
+kubectl -n kubernetes-dashboard create secret tls kubernetes-dashboard-certs \
+  --key /certs/k8s.nfangxu.cn.key \
+  --cert /certs/k8s.nfangxu.cn.pem
+
+kubectl create -f 1.kubernetes-dashboard.yaml
+
+kubectl create -f 2.dashboard-ingress.yaml
+```
