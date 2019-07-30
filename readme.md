@@ -11,6 +11,8 @@
 
     * [kubernetes dashboard Yaml 文件](https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta1/aio/deploy/recommended.yaml)
 
+## 准备工作
+
 ```bash
 
 # vim 设置行号
@@ -47,7 +49,6 @@ vim /etc/fstab # 注释掉 # /swapfile none swap sw 0 0
 
 # 前期准备完成
 
-
 # 主节点初始化
 kubeadm config images pull --image-repository=registry.aliyuncs.com/google_containers
 
@@ -60,14 +61,24 @@ source ~/.bashrc
 # 主节点不允许部署node
 kubectl taint nodes --all node-role.kubernetes.io/master-
 
+# 查看相关状态 # --all-namespaces 可以替换为 -n <namespaces>
+kubectl get nodes --all-namespaces 
+kubectl get pods --all-namespaces 
+kubectl get services --all-namespaces 
+kubectl get svc --all-namespaces 
+kubectl get deployments --all-namespaces 
+
+```
+
+## 对外访问
+
+```bash
+
 # 安装网络插件
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 
 # 安装dashboard
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta1/aio/deploy/recommended.yaml
-
-kubectl create secret generic kubernetes-dashboard-certs --from-file=/certs -n kube-system
-kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml
 
 # 安装 nginx-ingress
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/mandatory.yaml
@@ -76,18 +87,9 @@ kubectl -n kube-system create secret tls kubernetes-dashboard-certs \
   --key /certs/k8s.nfangxu.cn.key \
   --cert /certs/k8s.nfangxu.cn.pem
 
-# 断开客户端 重新连接一下
-
 # 获取用户Token
-kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep kubernetes-dashboard | awk '{print $1}')
-
 kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep kubernetes-dashboard | awk '{print $1}')
 
 # 查看账户状态
 kubectl get serviceaccounts kubernetes-dashboard -o yaml -n kubernetes-dashboard
-
-# 开启代理测试访问
-kubectl proxy --address='172.17.146.223' --accept-hosts='^*$'
-
-# http://nfangxu.cn:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
 ```
