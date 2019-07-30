@@ -6,6 +6,7 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
     kubernetes.io/ingress.class: "nginx"
+    nginx.org/ssl-services: kubernetes-dashboard
 spec:
   tls:
   - hosts: 
@@ -15,7 +16,7 @@ spec:
   - host: k8s.nfangxu.cn
     http:
       paths:
-      - path: /dashboard
+      - path: /
         backend:
           serviceName: kubernetes-dashboard
           servicePort: 443
