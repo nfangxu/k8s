@@ -11,6 +11,14 @@
     * [阿里云镜像加速](https://cr.console.aliyun.com/cn-beijing/instances/mirrors)
 
     * [官方文档](https://kubernetes.io/zh/docs/)
+    
+- 注意
+
+    * 以下会安装 `asciinema` 这个东西, 可以记录下你在命令行操作的所有步骤, 可以用来查错, 如果不需要, 可以不用装
+    
+    * 设置 `PS1` 环境变量, 只是看起来舒服一点, 跟 k8s 没一毛钱关系
+    
+    * 本文所使用的服务器配置为 `1c2G` 配置, 环境为 `ubuntu`, 新装的系统 干净的不要不要的, 如果你不是干净的系统, 自己掂量着办吧
 
 ## 准备工作
 
@@ -44,7 +52,7 @@ EOF
 # 安装基础软件
 apt update && apt install -y asciinema docker-ce kubelet kubeadm kubectl
 
-# 关闭 swap
+# 关闭 swap, 不关闭的话, k8s 会报错
 swapoff -a
 vim /etc/fstab # 注释掉 # /swapfile none swap sw 0 0
 
