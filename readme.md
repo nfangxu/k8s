@@ -80,6 +80,8 @@ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documen
 # 安装 nginx-ingress
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/mandatory.yaml
 
+# 从这块开始往下, 建议使用 2.0 版本
+
 # 安装dashboard
 kubectl -n kube-system create secret tls kubernetes-dashboard-certs \
   --key /certs/k8s.nfangxu.cn.key \
