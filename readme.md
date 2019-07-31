@@ -1,15 +1,16 @@
 ## 阿里云 Ubuntu 服务器安装 k8s 全记录
+
+- 前期准备
+
+    * 一台服务器, 开放了 80 / 443 端口 (可以多准备几台节点服务器, 内网互通的那种)
+    
+    * 一个域名, 与之相对应的 ssl 证书 (kubernetes-dashboard 需要 https 才能登陆, http 会出问题, 具体问题请自己踩坑)
+
 - 参考文档
 
     * [阿里云镜像加速](https://cr.console.aliyun.com/cn-beijing/instances/mirrors)
 
     * [官方文档](https://kubernetes.io/zh/docs/)
-
-    * [创建单个用户](https://github.com/kubernetes/dashboard/wiki/Creating-sample-user)
-
-    * [网络插件 kube-flannel](https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml)
-
-    * [kubernetes dashboard Yaml 文件](https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta1/aio/deploy/recommended.yaml)
 
 ## 准备工作
 
@@ -50,15 +51,16 @@ vim /etc/fstab # 注释掉 # /swapfile none swap sw 0 0
 # 前期准备完成
 
 # 主节点初始化
+# 如果你可以科学上网, 可以不用设置 --image-repository 
+# 如果你服务器的 CPU >= 2 可以不用设置 --ignore-preflight-errors=NumCPU
 kubeadm config images pull --image-repository=registry.aliyuncs.com/google_containers
-
 kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=NumCPU --image-repository=registry.aliyuncs.com/google_containers
 
 # 设置环境变量并使其生效
 echo 'export KUBECONFIG=/etc/kubernetes/admin.conf' >> ~/.bashrc
 source ~/.bashrc
 
-# 主节点不允许部署node
+# 主节点不允许部署node, 如果有多台服务器, 请忽略这个命令
 kubectl taint nodes --all node-role.kubernetes.io/master-
 
 # 查看相关状态 # --all-namespaces 可以替换为 -n <namespaces>
@@ -74,26 +76,33 @@ kubectl get deployments --all-namespaces
 
 ```bash
 
-# 安装网络插件
-kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+# 安装网络插件, 网络插件有好多种, 这里使用的是 kube-flannel
+# 官方配置: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+# 这个文件直接复制过来的
+kubectl apply -f kube-flannel.yml
 
-# 安装 nginx-ingress
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/mandatory.yaml
+# 安装 nginx-ingress, ingress 有好多个, 这里使用 nginx-ingress
+# 官方配置: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/mandatory.yaml
+# 直接复制过来的, 加了一个 hostNetwork: true 配置, 不加这个配置, 不会监听主机的 80/443 端口
+kubectl apply -f nginx-ingress-controller.yml
 
 # 从这块开始往下, 建议使用 2.0 版本
 
 # 安装dashboard
+# 使用自己的ssl证书, 创建 secret , 给 kubernetes-dashboard 用, 路径建议使用 绝对路径
 kubectl -n kube-system create secret tls kubernetes-dashboard-certs \
   --key /certs/k8s.nfangxu.cn.key \
   --cert /certs/k8s.nfangxu.cn.pem
 
+# 这里会报一个 secret 已存在的错, 忽略掉就行了
 kubectl apply -f kubernetes-dashboard.yaml
+# 使用 ingress 转发 dashboard
 kubectl apply -f dashboard-ingress.yaml
 
-# 获取用户Token
+# 获取登录 Token
 kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep kubernetes-dashboard | awk '{print $1}')
 
-# 权限问题
+# 登录成功, 会提示没有权限, 使用下面两个命令, 将 kubernetes-dashboard 用户给管理权限
 kubectl delete -f dashboard-admin.yaml
 kubectl create -f dashboard-admin.yaml
 
@@ -119,7 +128,6 @@ kubectl create -f 2.dashboard-ingress.yaml
 
 kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep kubernetes-dashboard | awk '{print $1}')
 
-# 权限问题
 kubectl delete -f 3.dashboard-admin.yaml
 kubectl create -f 3.dashboard-admin.yaml
 ```
