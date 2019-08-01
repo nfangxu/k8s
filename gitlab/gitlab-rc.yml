@@ -20,14 +20,14 @@ spec:
         - name: TZ
           value: Asia/Shanghai
         - name: GITLAB_TIMEZONE
-          value: Shanghai
+          value: Asia/Shanghai
 
         - name: GITLAB_SECRETS_DB_KEY_BASE
-          value: long-and-random-alpha-numeric-string
+          value: 97eeb89487d6dd187b173a530d182270
         - name: GITLAB_SECRETS_SECRET_KEY_BASE
-          value: long-and-random-alpha-numeric-string
+          value: dcaaecdb524dcd59a8bddf30657bf735
         - name: GITLAB_SECRETS_OTP_KEY_BASE
-          value: long-and-random-alpha-numeric-string
+          value: 461a59bb3910b6b82978cc62b7e1e20b
 
         - name: GITLAB_ROOT_PASSWORD
           value: passw0rd
