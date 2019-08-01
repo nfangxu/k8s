@@ -15,11 +15,12 @@ spec:
       containers:
       - name: gitlab
         image: sameersbn/gitlab:12.0.4
+        imagePullPolicy: IfNotPresent
         env:
         - name: TZ
-          value: Asia/Kolkata
+          value: Asia/Shanghai
         - name: GITLAB_TIMEZONE
-          value: Kolkata
+          value: Shanghai
 
         - name: GITLAB_SECRETS_DB_KEY_BASE
           value: long-and-random-alpha-numeric-string
@@ -29,12 +30,12 @@ spec:
           value: long-and-random-alpha-numeric-string
 
         - name: GITLAB_ROOT_PASSWORD
-          value:
+          value: passw0rd
         - name: GITLAB_ROOT_EMAIL
-          value:
+          value: nfangxu@gmail.com
 
         - name: GITLAB_HOST
-          value: git.default.cluster.local
+          value: gitlab.nfangxu.cn
         - name: GITLAB_PORT
           value: "80"
         - name: GITLAB_SSH_PORT
