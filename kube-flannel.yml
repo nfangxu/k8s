@@ -43,7 +43,7 @@ spec:
     max: 65535
   # SELinux
   seLinux:
-    # SELinux is unsed in CaaSP
+    # SELinux is unused in CaaSP
     rule: 'RunAsAny'
 ---
 kind: ClusterRole
@@ -106,6 +106,7 @@ data:
   cni-conf.json: |
     {
       "name": "cbr0",
+      "cniVersion": "0.3.1",
       "plugins": [
         {
           "type": "flannel",
@@ -148,16 +149,27 @@ spec:
         tier: node
         app: flannel
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: beta.kubernetes.io/os
+                    operator: In
+                    values:
+                      - linux
+                  - key: beta.kubernetes.io/arch
+                    operator: In
+                    values:
+                      - amd64
       hostNetwork: true
-      nodeSelector:
-        beta.kubernetes.io/arch: amd64
       tolerations:
       - operator: Exists
         effect: NoSchedule
       serviceAccountName: flannel
       initContainers:
       - name: install-cni
-        image: quay.io/coreos/flannel:v0.11.0-amd64
+        image: quay.mirrors.ustc.edu.cn/coreos/flannel:v0.11.0-amd64
         command:
         - cp
         args:
@@ -171,7 +183,7 @@ spec:
           mountPath: /etc/kube-flannel/
       containers:
       - name: kube-flannel
-        image: quay.io/coreos/flannel:v0.11.0-amd64
+        image: quay.mirrors.ustc.edu.cn/coreos/flannel:v0.11.0-amd64
         command:
         - /opt/bin/flanneld
         args:
@@ -187,7 +199,7 @@ spec:
         securityContext:
           privileged: false
           capabilities:
-             add: ["NET_ADMIN"]
+            add: ["NET_ADMIN"]
         env:
         - name: POD_NAME
           valueFrom:
@@ -231,16 +243,27 @@ spec:
         tier: node
         app: flannel
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: beta.kubernetes.io/os
+                    operator: In
+                    values:
+                      - linux
+                  - key: beta.kubernetes.io/arch
+                    operator: In
+                    values:
+                      - arm64
       hostNetwork: true
-      nodeSelector:
-        beta.kubernetes.io/arch: arm64
       tolerations:
       - operator: Exists
         effect: NoSchedule
       serviceAccountName: flannel
       initContainers:
       - name: install-cni
-        image: quay.io/coreos/flannel:v0.11.0-arm64
+        image: quay.mirrors.ustc.edu.cn/coreos/flannel:v0.11.0-arm64
         command:
         - cp
         args:
@@ -254,7 +277,7 @@ spec:
           mountPath: /etc/kube-flannel/
       containers:
       - name: kube-flannel
-        image: quay.io/coreos/flannel:v0.11.0-arm64
+        image: quay.mirrors.ustc.edu.cn/coreos/flannel:v0.11.0-arm64
         command:
         - /opt/bin/flanneld
         args:
@@ -314,16 +337,27 @@ spec:
         tier: node
         app: flannel
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: beta.kubernetes.io/os
+                    operator: In
+                    values:
+                      - linux
+                  - key: beta.kubernetes.io/arch
+                    operator: In
+                    values:
+                      - arm
       hostNetwork: true
-      nodeSelector:
-        beta.kubernetes.io/arch: arm
       tolerations:
       - operator: Exists
         effect: NoSchedule
       serviceAccountName: flannel
       initContainers:
       - name: install-cni
-        image: quay.io/coreos/flannel:v0.11.0-arm
+        image: quay.mirrors.ustc.edu.cn/coreos/flannel:v0.11.0-arm
         command:
         - cp
         args:
@@ -337,7 +371,7 @@ spec:
           mountPath: /etc/kube-flannel/
       containers:
       - name: kube-flannel
-        image: quay.io/coreos/flannel:v0.11.0-arm
+        image: quay.mirrors.ustc.edu.cn/coreos/flannel:v0.11.0-arm
         command:
         - /opt/bin/flanneld
         args:
@@ -397,16 +431,27 @@ spec:
         tier: node
         app: flannel
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: beta.kubernetes.io/os
+                    operator: In
+                    values:
+                      - linux
+                  - key: beta.kubernetes.io/arch
+                    operator: In
+                    values:
+                      - ppc64le
       hostNetwork: true
-      nodeSelector:
-        beta.kubernetes.io/arch: ppc64le
       tolerations:
       - operator: Exists
         effect: NoSchedule
       serviceAccountName: flannel
       initContainers:
       - name: install-cni
-        image: quay.io/coreos/flannel:v0.11.0-ppc64le
+        image: quay.mirrors.ustc.edu.cn/coreos/flannel:v0.11.0-ppc64le
         command:
         - cp
         args:
@@ -420,7 +465,7 @@ spec:
           mountPath: /etc/kube-flannel/
       containers:
       - name: kube-flannel
-        image: quay.io/coreos/flannel:v0.11.0-ppc64le
+        image: quay.mirrors.ustc.edu.cn/coreos/flannel:v0.11.0-ppc64le
         command:
         - /opt/bin/flanneld
         args:
@@ -480,16 +525,27 @@ spec:
         tier: node
         app: flannel
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: beta.kubernetes.io/os
+                    operator: In
+                    values:
+                      - linux
+                  - key: beta.kubernetes.io/arch
+                    operator: In
+                    values:
+                      - s390x
       hostNetwork: true
-      nodeSelector:
-        beta.kubernetes.io/arch: s390x
       tolerations:
       - operator: Exists
         effect: NoSchedule
       serviceAccountName: flannel
       initContainers:
       - name: install-cni
-        image: quay.io/coreos/flannel:v0.11.0-s390x
+        image: quay.mirrors.ustc.edu.cn/coreos/flannel:v0.11.0-s390x
         command:
         - cp
         args:
@@ -503,7 +559,7 @@ spec:
           mountPath: /etc/kube-flannel/
       containers:
       - name: kube-flannel
-        image: quay.io/coreos/flannel:v0.11.0-s390x
+        image: quay.mirrors.ustc.edu.cn/coreos/flannel:v0.11.0-s390x
         command:
         - /opt/bin/flanneld
         args:
