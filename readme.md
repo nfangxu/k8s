@@ -139,3 +139,14 @@ kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboar
 kubectl delete -f 3.dashboard-admin.yaml
 kubectl create -f 3.dashboard-admin.yaml
 ```
+
+## 补充
+
+```bash
+# 手动拉取 flannel 相关镜像
+docker pull quay.mirrors.ustc.edu.cn/coreos/flannel:v0.11.0-amd64
+docker pull quay.mirrors.ustc.edu.cn/coreos/flannel:v0.11.0-arm64
+docker pull quay.mirrors.ustc.edu.cn/coreos/flannel:v0.11.0-arm
+docker pull quay.mirrors.ustc.edu.cn/coreos/flannel:v0.11.0-ppc64le
+docker pull quay.mirrors.ustc.edu.cn/coreos/flannel:v0.11.0-s390x
+```
