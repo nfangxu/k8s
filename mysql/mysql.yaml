@@ -1,28 +1,29 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: mysql-pv
+  name: mysql-pv-volume
+  labels:
+    type: local
 spec:
+  storageClassName: manual
   capacity:
-    storage: 1Gi
+    storage: 5Gi
   accessModes:
-  - ReadWriteOnce
-  nfs:
-    path: /data/mysql
-    server: 172.17.177.183
-
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-pvc
+  name: mysql-pv-claim
 spec:
+  storageClassName: manual
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
-
+      storage: 5Gi
 ---
 apiVersion: v1
 kind: Service
@@ -33,8 +34,9 @@ spec:
   - port: 3306
   selector:
     app: mysql
+  clusterIP: None
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql
@@ -42,25 +44,26 @@ spec:
   selector:
     matchLabels:
       app: mysql
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
         app: mysql
     spec:
       containers:
-      - name: mysql
-        image: mysql:5.7
-        imagePullPolicy: "IfNotPresent"
+      - image: mysql:5.7
+        name: fx-mysql
         env:
         - name: MYSQL_ROOT_PASSWORD
-          value: password
+          value: 33MZZjaM0abY0hVj
         ports:
-        - name: mysql
-          containerPort: 3306
+        - containerPort: 3306
+          name: mysql
         volumeMounts:
         - name: mysql-persistent-storage
           mountPath: /var/lib/mysql
       volumes:
       - name: mysql-persistent-storage
         persistentVolumeClaim:
-          claimName: mysql-pvc
+          claimName: mysql-pv-claim
