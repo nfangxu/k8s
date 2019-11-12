@@ -1,0 +1,31 @@
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: 'true'
+  hosts:
+    - drone.nfangxu.cn
+  tls:
+    - secretName: drone-tls
+      hosts:
+        - drone.nfangxu.cn
+
+sourceControl:
+  provider: github
+  github:
+    clientID: 2517b374dcb310d966b9
+    clientSecretKey: clientSecret
+    clientSecretValue: 55aad61e436993d7beb014e69def8f12ab600142
+    server: https://github.com
+
+server:
+  adminUser: nfangxu  # github 的用户名
+  ## Configures drone to use kubernetes to run pipelines rather than agents, if enabled
+  ## will not deploy any agents.
+  kubernetes:
+    ## set to true if you want drone to use kubernetes to run pipelines
+    enabled: true
+    
+persistence:
+  enabled: true
+  existingClaim: drone-pv-claim
