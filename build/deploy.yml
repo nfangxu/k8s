@@ -1,0 +1,80 @@
+# deployment
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: __NAME__-deployment
+  namespace: default
+  labels:
+    k8s-app: __NAME__
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: __NAME__
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        k8s-app: __NAME__
+    spec:
+      containers:
+        - name: __NAME__
+          image: 'registry-vpc.cn-beijing.aliyuncs.com/nfangxu/__NAME__:__TAG__'
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+
+# service
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: __NAME__-service
+  namespace: default
+  labels:
+    k8s-app: __NAME__
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+  selector:
+    k8s-app: __NAME__
+  clusterIP: None
+  type: ClusterIP
+  sessionAffinity: None
+
+# ingress
+---
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: __NAME__-ingress
+  namespace: default
+  labels:
+    k8s-app: __NAME__
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: __NAME__.nfangxu.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: __NAME__-service
+              servicePort: 80
