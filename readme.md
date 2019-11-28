@@ -11,6 +11,8 @@
     * [阿里云镜像加速](https://cr.console.aliyun.com/cn-beijing/instances/mirrors)
 
     * [官方文档](https://kubernetes.io/zh/docs/)
+
+    * [Kubectl 命令技巧](https://jimmysong.io/kubernetes-handbook/guide/kubectl-cheatsheet.html)
     
 - 注意
 
@@ -38,7 +40,7 @@ source ~/.bashrc
 apt update && apt -y install apt-transport-https ca-certificates curl software-properties-common
 
 # asciinema 镜像源
-apt-add-repository ppa:zanchey/asciinema
+# apt-add-repository ppa:zanchey/asciinema
 
 # docker 和 k8s 镜像源
 curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | apt-key add -
@@ -50,15 +52,17 @@ deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release 
 EOF
 
 # 安装基础软件
-apt update && apt install -y asciinema docker-ce kubelet kubeadm kubectl
+apt update && apt install -y docker-ce kubelet kubeadm kubectl # && apt install -y asciinema
 
 # 关闭 swap, 不关闭的话, k8s 会报错
 swapoff -a
 vim /etc/fstab # 注释掉 # /swapfile none swap sw 0 0
 
-# 前期准备完成
+```
 
-# 主节点初始化
+## 初始化
+
+```bash
 # 如果你可以科学上网, 可以不用设置 --image-repository 
 # 如果你服务器的 CPU >= 2 可以不用设置 --ignore-preflight-errors=NumCPU
 kubeadm config images pull --image-repository=registry.aliyuncs.com/google_containers
@@ -72,11 +76,10 @@ source ~/.bashrc
 kubectl taint nodes --all node-role.kubernetes.io/master-
 
 # 查看相关状态 # --all-namespaces 可以替换为 -n <namespaces>
-kubectl get nodes --all-namespaces 
-kubectl get pods --all-namespaces 
-kubectl get services --all-namespaces 
-kubectl get svc --all-namespaces 
-kubectl get deployments --all-namespaces 
+kubectl get nodes -A # 等价于 kubectl get nodes --all-namespaces
+kubectl get pods -A # 等价于 kubectl get pods --all-namespaces 
+kubectl get svc -A # 等价于 kubectl get services --all-namespaces 
+kubectl get deploy -A # 等价于 kubectl get deployments --all-namespaces 
 
 ```
 
@@ -86,7 +89,7 @@ kubectl get deployments --all-namespaces
 
 # 安装网络插件, 网络插件有好多种, 这里使用的是 kube-flannel
 # 官方配置: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-# 这个文件直接复制过来的
+# 直接复制过来的
 kubectl apply -f kube-flannel.yml
 
 # 安装 nginx-ingress, ingress 有好多个, 这里使用 nginx-ingress
@@ -95,6 +98,9 @@ kubectl apply -f kube-flannel.yml
 kubectl apply -f nginx-ingress-controller.yml
 
 # 安装 dashboard, 并使用 ingress 转发 dashboard
+# 官方配置: https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta6/aio/deploy/recommended.yaml
+# dashboard-deployment.yaml 是上面链接直接复制过来的, 改了一个权限, 162 行
+# ingress 自己写的, 修改域名
 kubectl apply -f dashboard/
 
 # 配置 ssl 证书

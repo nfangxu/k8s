@@ -159,6 +159,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
+  # 此处由 官方的 kubernetes-dashboard 改为当前值
   name: cluster-admin
 subjects:
   - kind: ServiceAccount
