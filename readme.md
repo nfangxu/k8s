@@ -94,59 +94,16 @@ kubectl apply -f kube-flannel.yml
 # 直接复制过来的, 加了一个 hostNetwork: true 配置, 不加这个配置, 不会监听主机的 80/443 端口
 kubectl apply -f nginx-ingress-controller.yml
 
-# 从这块开始往下, 建议使用 2.0 版本
-
-# 安装dashboard
-# 使用自己的ssl证书, 创建 secret , 给 kubernetes-dashboard 用, 路径建议使用 绝对路径
-kubectl -n kube-system create secret tls kubernetes-dashboard-certs \
-  --key /certs/k8s.nfangxu.cn.key \
-  --cert /certs/k8s.nfangxu.cn.pem
-
-# 这里会报一个 secret 已存在的错, 忽略掉就行了
-kubectl apply -f kubernetes-dashboard.yaml
-# 使用 ingress 转发 dashboard
-kubectl apply -f dashboard-ingress.yaml
+# 安装 dashboard, 并使用 ingress 转发 dashboard
+# 使用自己的ssl证书, 创建 secret , 给 kubernetes-dashboard 用, 放置在 /certs 目录下
+# /certs/k8s.nfangxu.cn.key
+# /certs/k8s.nfangxu.cn.pem
+# 可以在 dashboard/dashboard-deployment.yaml 中, 找到 `@Todo 创建证书文件` 自行更改
+kubectl apply -f dashboard/
 
 # 获取登录 Token
 kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep kubernetes-dashboard | awk '{print $1}')
 
-# 登录成功, 会提示没有权限, 使用下面两个命令, 将 kubernetes-dashboard 用户给管理权限
-kubectl delete -f dashboard-admin.yaml
-kubectl create -f dashboard-admin.yaml
-
 # 查看账户状态
 kubectl get serviceaccounts kubernetes-dashboard -o yaml -n kube-system
-```
-
-## dashboard 2.0-beta
-
-```bash
-
-cd dashboard-2.0.0-beta1
-
-kubectl create -f 0.kubernetes-namespaces.yaml
-
-kubectl -n kubernetes-dashboard create secret tls kubernetes-dashboard-certs \
-  --key /certs/k8s.nfangxu.cn.key \
-  --cert /certs/k8s.nfangxu.cn.pem
-
-kubectl create -f 1.kubernetes-dashboard.yaml
-
-kubectl create -f 2.dashboard-ingress.yaml
-
-kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep kubernetes-dashboard | awk '{print $1}')
-
-kubectl delete -f 3.dashboard-admin.yaml
-kubectl create -f 3.dashboard-admin.yaml
-```
-
-## 补充
-
-```bash
-# 手动拉取 flannel 相关镜像
-docker pull quay.mirrors.ustc.edu.cn/coreos/flannel:v0.11.0-amd64
-docker pull quay.mirrors.ustc.edu.cn/coreos/flannel:v0.11.0-arm64
-docker pull quay.mirrors.ustc.edu.cn/coreos/flannel:v0.11.0-arm
-docker pull quay.mirrors.ustc.edu.cn/coreos/flannel:v0.11.0-ppc64le
-docker pull quay.mirrors.ustc.edu.cn/coreos/flannel:v0.11.0-s390x
 ```
