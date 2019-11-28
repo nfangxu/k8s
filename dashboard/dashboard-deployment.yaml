@@ -195,9 +195,6 @@ spec:
           args:
             - --auto-generate-certificates
             - --namespace=kubernetes-dashboard
-            # @Todo 创建证书文件
-            - --tls-cert-file=/certs/k8s.nfangxu.cn.pem
-            - --tls-key-file=/certs/k8s.nfangxu.cn.key
             # Uncomment the following line to manually specify Kubernetes API server Host
             # If not specified, Dashboard will attempt to auto discover the API server and connect
             # to it. Uncomment only if the default does not work.

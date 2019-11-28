@@ -95,11 +95,12 @@ kubectl apply -f kube-flannel.yml
 kubectl apply -f nginx-ingress-controller.yml
 
 # 安装 dashboard, 并使用 ingress 转发 dashboard
-# 使用自己的ssl证书, 创建 secret , 给 kubernetes-dashboard 用, 放置在 /certs 目录下
-# /certs/k8s.nfangxu.cn.key
-# /certs/k8s.nfangxu.cn.pem
-# 可以在 dashboard/dashboard-deployment.yaml 中, 找到 `@Todo 创建证书文件` 自行更改
 kubectl apply -f dashboard/
+
+# 配置 ssl 证书
+kubectl -n kubernetes-dashboard create secret tls dashboard-tls \
+  --key /certs/k8s.nfangxu.cn.key \
+  --cert /certs/k8s.nfangxu.cn.pem
 
 # 获取登录 Token
 kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep kubernetes-dashboard | awk '{print $1}')

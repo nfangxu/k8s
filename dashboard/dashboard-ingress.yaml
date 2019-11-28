@@ -12,7 +12,7 @@ spec:
   tls:
   - hosts: 
     - k8s.nfangxu.cn
-    secretName: kubernetes-dashboard-certs
+    secretName: dashboard-tls
   rules:
   - host: k8s.nfangxu.cn
     http:
