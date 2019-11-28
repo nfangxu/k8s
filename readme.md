@@ -102,8 +102,8 @@ kubectl apply -f nginx-ingress-controller.yml
 kubectl apply -f dashboard/
 
 # 获取登录 Token
-kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep kubernetes-dashboard | awk '{print $1}')
+kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep kubernetes-dashboard | awk '{print $1}')
 
 # 查看账户状态
-kubectl get serviceaccounts kubernetes-dashboard -o yaml -n kube-system
+kubectl get serviceaccounts kubernetes-dashboard -o yaml -n kubernetes-dashboard
 ```
