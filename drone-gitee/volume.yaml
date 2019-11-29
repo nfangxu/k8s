@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: drone-pv-volume
+  name: drone-gitee-pv-volume
   labels:
     type: local
 spec:
@@ -11,12 +11,12 @@ spec:
   accessModes:
   - ReadWriteOnce
   hostPath:
-    path: "/mnt/drone"
+    path: "/mnt/drone-gitee"
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: drone-pv-claim
+  name: drone-gitee-pv-claim
 spec:
   storageClassName: manual
   accessModes:

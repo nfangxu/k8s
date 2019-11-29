@@ -114,3 +114,18 @@ kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboar
 # 查看账户状态
 kubectl get serviceaccounts kubernetes-dashboard -o yaml -n kubernetes-dashboard
 ```
+
+# 配置 Drone 实现自动部署
+
+- [官方文档](https://docs.drone.io)
+
+> 参考 https://www.qikqiak.com/post/drone-with-k8s-1/
+
+```bash
+kubectl apply -f drone-gitee/volume.yaml
+
+helm install --name drone-gitee \
+     --namespace drone \
+     -f drone-gitee/values.yaml \
+     stable/drone
+```
