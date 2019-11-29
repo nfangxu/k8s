@@ -138,15 +138,20 @@ kubectl -n drone create secret tls drone-tls \
   --cert /certs/drone.nfangxu.cn.pem
 
 # 删除
-helm delete drone-gitee --purge
+# helm delete drone-gitee --purge
 ```
 
 # Jenkins
 
 ```bash
-
+# 安装 Jenkins
+# chart 地址: https://github.com/helm/charts/tree/master/stable/jenkins
 helm install --name jenkins --namespace jenkins -f jenkins/values.yaml stable/jenkins
 
-helm delete jenkins --purge
+# 获取密码
+printf $(kubectl get secret --namespace jenkins jenkins -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode);echo
+
+# 删除 Jenkins
+# helm delete jenkins --purge
 
 ```
