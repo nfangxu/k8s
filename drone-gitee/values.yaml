@@ -25,6 +25,10 @@ server:
   kubernetes:
     ## set to true if you want drone to use kubernetes to run pipelines
     enabled: true
+  
+  # host
+  host: "drone.nfangxu.cn"
+  protocol: https
     
 persistence:
   enabled: true
