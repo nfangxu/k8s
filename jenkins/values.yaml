@@ -30,4 +30,4 @@ master:
 
 persistence:
   enabled: true
-  size: "5Gi"
+  existingClaim: jenkins
