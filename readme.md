@@ -122,10 +122,15 @@ kubectl get serviceaccounts kubernetes-dashboard -o yaml -n kubernetes-dashboard
 > 参考 https://www.qikqiak.com/post/drone-with-k8s-1/
 
 ```bash
+# 配置持久卷
 kubectl apply -f drone-gitee/volume.yaml
 
+# 安装
 helm install --name drone-gitee \
      --namespace drone \
      -f drone-gitee/values.yaml \
      stable/drone
+
+# 删除
+helm delete drone-gitee --purge
 ```

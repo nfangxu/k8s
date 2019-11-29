@@ -28,4 +28,4 @@ server:
     
 persistence:
   enabled: true
-  existingClaim: drone-pv-claim
+  existingClaim: drone-gitee-pv-claim
