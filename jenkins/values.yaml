@@ -31,5 +31,3 @@ master:
 persistence:
   enabled: true
   size: "5Gi"
-  mounts:
-    - mountPath: /mnt/jenkins
