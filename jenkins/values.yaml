@@ -5,7 +5,7 @@ master:
   tag: "lts"
 
   adminUser: "admin"
-  adminPassword: "123456"
+  # adminPassword: "123456"
 
   resources:
     requests:

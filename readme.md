@@ -147,4 +147,6 @@ helm delete drone-gitee --purge
 
 helm install --name jenkins --namespace jenkins -f jenkins/values.yaml stable/jenkins
 
+helm delete jenkins --purge
+
 ```
