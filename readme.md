@@ -140,3 +140,11 @@ kubectl -n drone create secret tls drone-tls \
 # 删除
 helm delete drone-gitee --purge
 ```
+
+# Jenkins
+
+```bash
+
+helm install --name jenkins --namespace jenkins -f jenkins/values.yaml stable/jenkins
+
+```
