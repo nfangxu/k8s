@@ -126,10 +126,16 @@ kubectl get serviceaccounts kubernetes-dashboard -o yaml -n kubernetes-dashboard
 kubectl apply -f drone-gitee/volume.yaml
 
 # 安装
+# chart 地址: https://github.com/helm/charts/tree/master/stable/drone
 helm install --name drone-gitee \
      --namespace drone \
      -f drone-gitee/values.yaml \
      stable/drone
+
+# 配置证书
+kubectl -n drone create secret tls drone-tls \
+  --key /certs/drone.nfangxu.cn.key \
+  --cert /certs/drone.nfangxu.cn.pem
 
 # 删除
 helm delete drone-gitee --purge

@@ -11,8 +11,8 @@ ingress:
         - drone.nfangxu.cn
 
 sourceControl:
-  provider: github
-  github:
+  provider: gitlab
+  gitlab:
     clientID: dc86fb2063961c361e6809fa5d44ba1e919f3d50ad2249c817a6c95d17cdff0b
     clientSecretKey: clientSecret
     clientSecretValue: f03cba2ed08669d2e3cf1d1c8e98df643621e51bbe2210a264f9ea58c2860cc6
