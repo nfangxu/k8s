@@ -29,4 +29,7 @@ master:
         - jenkins.nfangxu.cn
 
 persistence:
-  enabled: false
+  enabled: true
+  size: "5Gi"
+  mounts:
+    - mountPath: /mnt/jenkins
