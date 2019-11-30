@@ -17,6 +17,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: drone-pv-claim
+  namespace: drone
 spec:
   storageClassName: manual
   accessModes:

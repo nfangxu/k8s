@@ -123,13 +123,13 @@ kubectl get serviceaccounts kubernetes-dashboard -o yaml -n kubernetes-dashboard
 
 ```bash
 # 配置持久卷
-kubectl apply -f drone-gitee/volume.yaml
+kubectl apply -f drone/volume.yaml
 
 # 安装
 # chart 地址: https://github.com/helm/charts/tree/master/stable/drone
-helm install --name drone-gitee \
+helm install --name drone \
      --namespace drone \
-     -f drone-gitee/values.yaml \
+     -f drone/values.yaml \
      stable/drone
 
 # 配置证书
@@ -151,7 +151,7 @@ helm install --name jenkins --namespace jenkins -f jenkins/values.yaml stable/je
 # 获取密码
 printf $(kubectl get secret --namespace jenkins jenkins -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode);echo
 
-# 删除 Jenkins
+# 删除 Jenkins PZYyj2ebkK
 # helm delete jenkins --purge
 
 ```
