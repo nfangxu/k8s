@@ -138,7 +138,7 @@ kubectl -n drone create secret tls drone-tls \
   --cert /certs/drone.nfangxu.cn.pem
 
 # 删除
-# helm delete drone-gitee --purge
+# helm delete drone --purge
 ```
 
 # Jenkins
