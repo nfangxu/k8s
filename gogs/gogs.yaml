@@ -1,0 +1,84 @@
+apiVersion: extensions/v1
+kind: Deployment
+metadata:
+  name: gogs
+  labels:
+    app: gogs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gogs
+  template:
+    metadata:
+      name: gogs
+      labels:
+        app: gogs
+    spec:
+      containers:
+      - name: gogs
+        image: gogs/gogs:0.11.86
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: TZ
+          value: Asia/Shanghai
+
+        volumeMounts:
+          - name: gogs-persistent-storage
+            mountPath: /data
+        ports:
+        - containerPort: 3000
+          name: web
+          protocol: TCP
+        - containerPort: 22
+          name: ssh
+          protocol: TCP
+        resources:
+          limits:
+            cpu: "1000m"
+            memory: "1024Mi"
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+        livenessProbe:
+          httpGet:
+            port: 3000
+        readinessProbe:
+          httpGet:
+            port: 3000
+      volumes:
+      - name: gogs-persistent-storage
+        persistentVolumeClaim:
+          claimName: gogs-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gogs
+  labels:
+    app: gogs
+spec:
+  selector:
+    app: gogs
+  ports:
+    - name: http
+      port: 3000
+  type: ClusterIP
+
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: gogs-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - host: gogs.nfangxu.cn
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: gogs
+          servicePort: 3000
