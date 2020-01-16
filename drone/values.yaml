@@ -11,12 +11,9 @@ ingress:
         - drone.nfangxu.cn
 
 sourceControl:
-  provider: github
-  github:
-    clientID: 2517b374dcb310d966b9
-    clientSecretKey: clientSecret
-    clientSecretValue: 55aad61e436993d7beb014e69def8f12ab600142
-    server: https://github.com
+  provider: gogs
+  gogs:
+    server: http://gogs.nfangxu.cn
 
 server:
   adminUser: nfangxu  # github 的用户名
