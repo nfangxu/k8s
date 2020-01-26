@@ -3,6 +3,7 @@ clusterZone: "cluster.local"
 master:
   image: "jenkins/jenkins"
   tag: "lts"
+  imagePullPolicy: "IfNotPresent"
 
   adminUser: "admin"
   # adminPassword: "123456"
