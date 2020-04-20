@@ -8,8 +8,8 @@ flush privileges;
 
 # 使用 helm 创建
 helm install --name fx-cloud \
-    --nextcloud.username nfangxu \
-    --nextcloud.password changeme \
+    --set nextcloud.username=nfangxu \
+    --set nextcloud.password=changeme \
     -f values.yaml \
     stable/nextcloud
 ```
