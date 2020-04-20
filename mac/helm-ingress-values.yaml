@@ -1,0 +1,14 @@
+# 可以根据实际情况修改内容, 可修改内容参展 官方链接
+# https://github.com/helm/charts/blob/master/stable/nginx-ingress/values.yaml
+controller:
+  # 修改为国内源
+  image:
+    repository: quay.azk8s.cn/kubernetes-ingress-controller/nginx-ingress-controller
+    tag: "0.27.0"
+  # 设置监听 主机端口
+  hostNetwork: true
+defaultBackend:
+  # 修改为国内源
+  image:
+    repository: gcr.azk8s.cn/google-containers/defaultbackend-amd64
+    tag: "1.5"
