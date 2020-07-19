@@ -24,7 +24,7 @@
 
 ## 准备工作
 
-```bash
+```shell script
 
 # vim 设置行号
 cat <<EOF > ~/.vimrc
@@ -62,7 +62,7 @@ vim /etc/fstab # 注释掉 # /swapfile none swap sw 0 0
 
 ## 初始化
 
-```bash
+```shell script
 # 如果你可以科学上网, 可以不用设置 --image-repository 
 # 如果你服务器的 CPU >= 2 可以不用设置 --ignore-preflight-errors=NumCPU
 kubeadm config images pull --image-repository=registry.aliyuncs.com/google_containers
@@ -85,7 +85,7 @@ kubectl get deploy -A # 等价于 kubectl get deployments --all-namespaces
 
 ## 对外访问
 
-```bash
+```shell script
 
 # 安装网络插件, 网络插件有好多种, 这里使用的是 kube-flannel
 # 官方配置: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
@@ -121,7 +121,7 @@ kubectl get serviceaccounts kubernetes-dashboard -o yaml -n kubernetes-dashboard
 
 > 参考 https://www.qikqiak.com/post/drone-with-k8s-1/
 
-```bash
+```shell script
 # 配置持久卷
 kubectl apply -f drone/volume.yaml
 
@@ -143,7 +143,7 @@ kubectl -n drone create secret tls drone-tls \
 
 # Jenkins
 
-```bash
+```shell script
 # 安装 Jenkins
 # chart 地址: https://github.com/helm/charts/tree/master/stable/jenkins
 helm install --name jenkins --namespace jenkins -f jenkins/values.yaml stable/jenkins
